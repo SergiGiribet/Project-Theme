@@ -108,51 +108,51 @@ Rectangle {
         x: -20
         y: 20
         spacing: 5
-        horizontalAlignment: Text.AlignRight
+        
 
         Text {
             text: "LOGIN ATTEMPTS: 0"
             font.pixelSize: 14
             color: "#ff6b52"
-            horizontalAlignment: Text.AlignRight
+            
         }
         Text {
             text: "SYSTEM UPTIME: 23:45:12" // Esto debería ser dinámico si sddm lo provee
             font.pixelSize: 14
             color: "#ff6b52"
-            horizontalAlignment: Text.AlignRight
+            
         }
         Text {
             // Usamos una expresión JavaScript para obtener la hora actual
             text: "TIME: " + Qt.formatTime(new Date(), "hh:mm:ss")
             font.pixelSize: 14
             color: "#ff6b52"
-            horizontalAlignment: Text.AlignRight
+            
         }
         Item { width: 1; height: 10 } // Espacio
         Text {
             text: "83.695.90.616"
             font.pixelSize: 14
             color: "#ff6b52"
-            horizontalAlignment: Text.AlignRight
+            
         }
         Text {
             text: "16.797.56.353"
             font.pixelSize: 14
             color: "#ff6b52"
-            horizontalAlignment: Text.AlignRight
+            
         }
         Text {
             text: "19.614.78.952"
             font.pixelSize: 14
             color: "#ff6b52"
-            horizontalAlignment: Text.AlignRight
+            
         }
         Text {
             text: "14.624.11.248"
             font.pixelSize: 14
             color: "#ff6b52"
-            horizontalAlignment: Text.AlignRight
+            
         }
     }
 
@@ -352,25 +352,25 @@ Rectangle {
         x: -20
         y: -20
         spacing: 5
-        horizontalAlignment: Text.AlignRight
+        
 
         Text {
             text: "MEMORY: 2.1GB / 8.0GB" // Esto debería ser dinámico si sddm lo provee
             font.pixelSize: 14
             color: "#ff6b52"
-            horizontalAlignment: Text.AlignRight
+            
         }
         Text {
             text: "CPU: INTEL i7-6750" // Esto debería ser dinámico si sddm lo provee
             font.pixelSize: 14
             color: "#ff6b52"
-            horizontalAlignment: Text.AlignRight
+            
         }
         Text {
             text: "TEMP: 45°C" // Esto debería ser dinámico si sddm lo provee
             font.pixelSize: 14
             color: "#ff6b52"
-            horizontalAlignment: Text.AlignRight
+            
         }
         Item { width: 1; height: 10 } // Espacio
         Row {
