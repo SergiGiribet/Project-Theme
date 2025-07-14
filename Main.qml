@@ -275,7 +275,7 @@ Rectangle {
                         text: parent.text
                         font: parent.font
                         color: parent.pressed ? "#ff6b52" : "white" // Cambia el color del texto al presionar
-                        horizontalAlignment: Text.AlignHCenter
+
                         verticalAlignment: Text.AlignVCenter
                     }
                     background: Rectangle {
@@ -303,7 +303,7 @@ Rectangle {
                         text: parent.text
                         font: parent.font
                         color: parent.pressed ? "white" : "black" // Cambia el color del texto al presionar
-                        horizontalAlignment: Text.AlignHCenter
+
                         verticalAlignment: Text.AlignVCenter
                     }
                     background: Rectangle {
@@ -340,7 +340,7 @@ Rectangle {
         font.pixelSize: 12
         color: "#ff6b52"
         anchors.bottom: parent.bottom
-        anchors.horizontalCenter: parent.horizontalCenter
+
         y: -40 // Ajusta la posición para que quede más abajo como en la imagen
     }
 
