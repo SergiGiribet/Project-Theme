@@ -71,16 +71,16 @@ Rectangle {
 
             anchors.centerIn: parent
 
-            Image {
-                anchors.fill: parent
-                source: Qt.resolvedUrl("images/rectangle.png")
-            }
+#            Image {
+#                anchors.fill: parent
+#                source: Qt.resolvedUrl("images/rectangle.png")
+#            }
 
-            Image {
-                anchors.fill: parent
-                source: Qt.resolvedUrl("images/rectangle_overlay.png")
-                opacity: 0.1
-            }
+#            Image {
+#                anchors.fill: parent
+#                source: Qt.resolvedUrl("images/rectangle_overlay.png")
+#                opacity: 0.1
+#            }
 
             Item {
                 anchors.margins: 20
