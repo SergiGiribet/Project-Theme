@@ -186,7 +186,7 @@ Rectangle {
                 spacing: 5
                 Text {
                     id: usernameDisplay
-                    text: "Girquell" // Nombre de usuario por defecto como en la imagen
+                    text: "girquell" // Nombre de usuario por defecto como en la imagen
                     font.pixelSize: 24
                     font.bold: true
                     color: "white"
