@@ -1,6 +1,6 @@
 // components/LoginBox.qml
 import QtQuick 2.0
-import SDDMComponents 1.0 // For TextField, PasswordField, Button
+import SddmComponents 1.0 // For TextField, PasswordField, Button
 
 Item {
     id: loginBoxRoot
@@ -35,7 +35,7 @@ Item {
         Item { width: 1; height: 20 }
 
         // Username Field
-        SDDMComponents.TextField {
+        SddmComponents.TextField {
             id: usernameField
             width: 300 // Adjust width
             height: 45 // Adjust height
@@ -52,7 +52,7 @@ Item {
         }
 
         // Password Field
-        SDDMComponents.PasswordField {
+        SddmComponents.PasswordField {
             id: passwordField
             width: 300 // Adjust width
             height: 45 // Adjust height
@@ -74,7 +74,7 @@ Item {
             spacing: 20
 
             // BACK Button
-            SDDMComponents.Button { // Using a generic SDDM Button for simplicity
+            SddmComponents.Button { // Using a generic SDDM Button for simplicity
                 id: backButton
                 width: 120
                 height: 45
@@ -97,7 +97,7 @@ Item {
             }
 
             // LOGIN Button
-            SDDMComponents.Button {
+            SddmComponents.Button {
                 id: loginButton
                 width: 120
                 height: 45
