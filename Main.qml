@@ -1,302 +1,144 @@
-/***************************************************************************
-* Copyright (c) 2013 Reza Fatahilah Shah <rshah0385@kireihana.com>
-* Copyright (c) 2013 Abdurrahman AVCI <abdurrahmanavci@gmail.com>
-*
-* Permission is hereby granted, free of charge, to any person
-* obtaining a copy of this software and associated documentation
-* files (the "Software"), to deal in the Software without restriction,
-* including without limitation the rights to use, copy, modify, merge,
-* publish, distribute, sublicense, and/or sell copies of the Software,
-* and to permit persons to whom the Software is furnished to do so,
-* subject to the following conditions:
-*
-* The above copyright notice and this permission notice shall be included
-* in all copies or substantial portions of the Software.
-*
-* THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS
-* OR IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
-* FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL
-* THE AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR
-* OTHER LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE,
-* ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE
-* OR OTHER DEALINGS IN THE SOFTWARE.
-*
-***************************************************************************/
-
+// Main.qml
 import QtQuick 2.0
-import SddmComponents 2.0
+import SDDMComponents 1.0 // Crucial for SDDM's functions (login, shutdown etc.)
+import "components" // To import your custom QML components
 
 Rectangle {
-    width: 640
-    height: 480
+    id: root
+    width: Screen.width
+    height: Screen.height
+    color: "#000000" // Fallback black background
 
-    LayoutMirroring.enabled: Qt.locale().textDirection == Qt.RightToLeft
-    LayoutMirroring.childrenInherit: true
-
-    property int sessionIndex: session.index
-
-    TextConstants { id: textConstants }
-
-    Connections {
-        target: sddm
-        function onLoginSucceeded() {
-        }
-        function onInformationMessage(message) {
-        }
-        function onLoginFailed() {
-            pw_entry.text = ""
-        }
+    // 1. Load Custom Font
+    // Make sure 'fonts/YourMonospaceFont.ttf' exists in your theme directory
+    FontLoader {
+        id: monospaceFont
+        source: "fonts/YourMonospaceFont.ttf"
     }
 
-    Background {
+    // 2. Background Image
+    Image {
+        source: "images/background.jpg" // Make sure this image exists in images/
         anchors.fill: parent
-        source: Qt.resolvedUrl(config.background)
         fillMode: Image.PreserveAspectCrop
-        onStatusChanged: {
-            var defaultBackground = Qt.resolvedUrl(config.defaultBackground)
-            if (status == Image.Error && source != defaultBackground) {
-                source = defaultBackground
-            }
+        // opacity: 0.9 // Adjust if you want it slightly less vibrant
+    }
+
+    // 3. Login Box (using your component)
+    LoginBox {
+        id: loginForm
+        anchors.centerIn: parent // Centers the entire login box on the screen
+    }
+
+    // 4. Top-Left System Information
+    Column {
+        anchors.top: parent.top
+        anchors.left: parent.left
+        x: 20 // Margin from left edge
+        y: 20 // Margin from top edge
+        spacing: 5
+
+        Text {
+            text: "SYSTEM: ABP Linux"
+            font.family: monospaceFont.name
+            font.pixelSize: 16
+            color: "#ff8800"
+        }
+        Text {
+            // sddm.kernelVersion is a dynamic property provided by SDDM
+            text: "Kernel: " + (sddm.kernelVersion ? sddm.kernelVersion : "Unknown")
+            font.family: monospaceFont.name
+            font.pixelSize: 16
+            color: "#ff8800"
+        }
+        Text {
+            // Note: "FPS" is usually for games. This might be a placeholder or date.
+            // If you want a static date: Qt.formatDate(new Date(), "yyyy.MM.dd")
+            text: "FPS: 20.12.13" // Hardcoded as in your image, if it's not a real FPS counter
+            font.family: monospaceFont.name
+            font.pixelSize: 16
+            color: "#ff8800"
         }
     }
 
-    Rectangle {
-        anchors.fill: parent
-        color: "transparent"
-        //visible: primaryScreen
+    // 5. Bottom-Right System Information
+    Column {
+        anchors.bottom: parent.bottom
+        anchors.right: parent.right
+        x: -20 // Margin from right edge
+        y: -20 // Margin from bottom edge
+        spacing: 5
+        horizontalAlignment: Text.AlignRight // Align text to the right within the column
 
-        Rectangle {
-            width: 416; height: 262
-            color: "#00000000"
-
-            anchors.centerIn: parent
-
-            Image {
-                anchors.fill: parent
-                source: Qt.resolvedUrl("images/rectangle.png")
-            }
-
-            Image {
-                anchors.fill: parent
-                source: Qt.resolvedUrl("images/rectangle_overlay.png")
-                opacity: 0.1
-            }
-
-            Item {
-                anchors.margins: 20
-                anchors.fill: parent
-
-                Text {
-                    height: 50
-                    anchors.top: parent.top
-                    anchors.left: parent.left; anchors.right: parent.right
-
-                    color: "#0b678c"
-                    opacity: 0.75
-
-                    text: sddm.hostName
-
-                    font.bold: true
-                    font.pixelSize: 18
-                }
-
-                Column {
-                    anchors.centerIn: parent
-
-                    Row {
-                        Image { source: Qt.resolvedUrl("images/user_icon.png") }
-
-                        TextBox {
-                            id: user_entry
-
-                            width: 150; height: 30
-                            anchors.verticalCenter: parent.verticalCenter;
-
-                            text: userModel.lastUser
-
-                            font.pixelSize: 14
-
-                            KeyNavigation.backtab: layoutBox; KeyNavigation.tab: pw_entry
-                        }
-                    }
-
-                    Row {
-
-                        Image { source: Qt.resolvedUrl("images/lock.png") }
-
-                        PasswordBox {
-                            id: pw_entry
-                            width: 150; height: 30
-                            anchors.verticalCenter: parent.verticalCenter;
-
-                            tooltipBG: "CornflowerBlue"
-
-                            font.pixelSize: 14
-
-                            KeyNavigation.backtab: user_entry; KeyNavigation.tab: login_button
-
-                            Keys.onPressed: function (event) {
-                                if (event.key === Qt.Key_Return || event.key === Qt.Key_Enter) {
-                                    sddm.login(user_entry.text, pw_entry.text, sessionIndex)
-                                    event.accepted = true
-                                }
-                            }
-                        }
-                    }
-                }
-
-                ImageButton {
-                    id: login_button
-                    anchors.right: parent.right
-                    anchors.verticalCenter: parent.verticalCenter
-                    anchors.margins: 20
-
-                    source: Qt.resolvedUrl("images/login_normal.png")
-
-                    onClicked: sddm.login(user_entry.text, pw_entry.text, sessionIndex)
-
-		    KeyNavigation.backtab: pw_entry; KeyNavigation.tab: session
-                }
-
-                Item {
-                    height: 20
-                    anchors.bottom: parent.bottom
-                    anchors.left: parent.left; anchors.right: parent.right
-
-                    Row {
-                        id: buttonRow
-                        anchors.left: parent.left
-                        anchors.verticalCenter: parent.verticalCenter
-
-                        spacing: 8
-
-                        ImageButton {
-                            id: system_button
-                            source: Qt.resolvedUrl("images/system_shutdown.png")
-                            onClicked: sddm.powerOff()
-
-			    KeyNavigation.backtab: session; KeyNavigation.tab: reboot_button
-                        }
-
-                        ImageButton {
-                            id: reboot_button
-                            source: Qt.resolvedUrl("images/system_reboot.png")
-                            onClicked: sddm.reboot()
-
-                            KeyNavigation.backtab: system_button; KeyNavigation.tab: suspend_button
-                        }
-
-                        ImageButton {
-                            id: suspend_button
-                            source: Qt.resolvedUrl("images/system_suspend.png")
-                            visible: sddm.canSuspend
-                            onClicked: sddm.suspend()
-
-                            KeyNavigation.backtab: reboot_button; KeyNavigation.tab: hibernate_button
-                        }
-
-                        ImageButton {
-                            id: hibernate_button
-                            source: Qt.resolvedUrl("images/system_hibernate.png")
-                            visible: sddm.canHibernate
-                            onClicked: sddm.hibernate()
-
-                            KeyNavigation.backtab: suspend_button; KeyNavigation.tab: session
-                        }
-                    }
-
-                    Timer {
-                        id: time
-                        interval: 100
-                        running: true
-                        repeat: true
-
-                        onTriggered: {
-                            dateTime.text = Qt.formatDateTime(new Date(), "dddd, dd MMMM yyyy HH:mm AP")
-                        }
-                    }
-
-                    Text {
-                        id: dateTime
-                        anchors.right: parent.right
-                        anchors.bottom: parent.bottom
-                        horizontalAlignment: Text.AlignRight
-
-                        color: "#0b678c"
-                        font.bold: true
-                        font.pixelSize: 12
-                    }
-                }
-            }
+        Text {
+            // sddm.memoryUsed and sddm.memoryTotal are dynamic properties
+            text: "MEMORY: " +
+                  (sddm.memoryUsed ? (sddm.memoryUsed / 1024).toFixed(2) + "G" : "N/A") + " / " +
+                  (sddm.memoryTotal ? (sddm.memoryTotal / 1024).toFixed(2) + "G" : "N/A")
+            font.family: monospaceFont.name
+            font.pixelSize: 16
+            color: "#ff8800"
+        }
+        Text {
+            // sddm.cpuModel is a dynamic property
+            text: "CPU: " + (sddm.cpuModel ? sddm.cpuModel : "Intel XXXXXX")
+            font.family: monospaceFont.name
+            font.pixelSize: 16
+            color: "#ff8800"
         }
     }
 
-    Rectangle {
-        id: actionBar
-        anchors.top: parent.top;
+    // 6. Shutdown Button/Icon (bottom center)
+    Column {
         anchors.horizontalCenter: parent.horizontalCenter
-        width: parent.width; height: 40
+        anchors.bottom: parent.bottom
+        y: -30 // Adjust position from bottom
+        spacing: 10
 
-        Row {
-            anchors.left: parent.left
-            anchors.margins: 5
-            height: parent.height
-            spacing: 5
+        Image {
+            id: shutdownIcon
+            source: "images/shutdown_icon.png" // Make sure this image exists
+            width: 48 // Adjust size
+            height: 48 // Adjust size
+            anchors.horizontalCenter: parent.horizontalCenter
+            fillMode: Image.PreserveAspectFit
 
-            Text {
-                height: parent.height
-                anchors.verticalCenter: parent.verticalCenter
-
-                text: textConstants.session
-                font.pixelSize: 14
-                verticalAlignment: Text.AlignVCenter
+            MouseArea {
+                anchors.fill: parent
+                onClicked: sddm.shutdown() // Action to shutdown
             }
-
-            ComboBox {
-                id: session
-                width: 245
-                anchors.verticalCenter: parent.verticalCenter
-
-                arrowIcon: Qt.resolvedUrl("angle-down.png")
-
-                model: sessionModel
-                index: sessionModel.lastIndex
-
-                font.pixelSize: 14
-
-                KeyNavigation.backtab: hibernate_button; KeyNavigation.tab: layoutBox
-            }
-
-            Text {
-                height: parent.height
-                anchors.verticalCenter: parent.verticalCenter
-
-                visible: layoutBox.visible
-
-                text: textConstants.layout
-                font.pixelSize: 14
-                verticalAlignment: Text.AlignVCenter
-            }
-
-            LayoutBox {
-                id: layoutBox
-                width: 90
-                anchors.verticalCenter: parent.verticalCenter
-                font.pixelSize: 14
-
-                visible: keyboard.enabled && keyboard.layouts.length > 0
-
-                arrowIcon: Qt.resolvedUrl("angle-down.png")
-
-                KeyNavigation.backtab: session; KeyNavigation.tab: user_entry
-            }
+        }
+        Text {
+            text: "Shutdown"
+            font.family: monospaceFont.name
+            font.pixelSize: 14
+            color: "white"
+            anchors.horizontalCenter: parent.horizontalCenter
         }
     }
 
-    Component.onCompleted: {
-        if (user_entry.text === "")
-            user_entry.focus = true
-        else
-            pw_entry.focus = true
+    // Optional: Other texts/logos from your image (bottom left, top right)
+    Text {
+        text: "USER LOGGED" // Hardcoded placeholder
+        font.family: monospaceFont.name
+        font.pixelSize: 14
+        color: "#ff8800"
+        anchors.top: parent.top
+        anchors.right: parent.right
+        x: -20
+        y: 20
     }
+
+    Text {
+        text: "SDDM ALIVE" // Hardcoded placeholder
+        font.family: monospaceFont.name
+        font.pixelSize: 14
+        color: "#ff8800"
+        anchors.top: parent.top
+        anchors.right: parent.right
+        x: -20
+        y: 40
+    }
+
+    // ... (any other elements you need)
 }
