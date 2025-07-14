@@ -1,19 +1,13 @@
-// Main.qml
-import QtQuick 2.0
-import SddmComponents 2.0
+// Main.qml - SDDM-like login in un solo archivo sin SddmComponents
+import QtQuick 2.15
+import QtQuick.Controls 2.15
 import QtGraphicalEffects 1.0
-import "components"
 
 Rectangle {
     id: root
-    width: Screen.width
-    height: Screen.height
+    width: 1024
+    height: 768
     color: "#000000"
-
-    FontLoader {
-        id: monospaceFont
-        source: "fonts/YourMonospaceFont.ttf"
-    }
 
     Image {
         id: bg
@@ -23,7 +17,6 @@ Rectangle {
     }
 
     Rectangle {
-        id: overlay
         anchors.fill: parent
         color: "#000000AA"
     }
@@ -43,8 +36,6 @@ Rectangle {
                 GradientStop { position: 0.51; color: "transparent" }
             }
             rotation: 90
-            width: parent.width
-            height: parent.height
         }
     }
 
@@ -74,111 +65,103 @@ Rectangle {
         }
     }
 
+    // LOGIN BOX
     Rectangle {
-        anchors.fill: parent
-        border.color: "#ff6b52"
-        border.width: 1
-        anchors.margins: 4
-        opacity: 0.2
-    }
-
-    Column {
-        anchors.top: parent.top
-        anchors.left: parent.left
-        x: 20
-        y: 20
-        spacing: 5
-
-        Text { text: "SECURITY LEVEL: HIGH"; font.family: monospaceFont.name; font.pixelSize: 14; color: "#ff6b52" }
-        Text { text: "SYSTEM: ARCH LINUX"; font.family: monospaceFont.name; font.pixelSize: 14; color: "#ff6b52" }
-        Text { text: "KERNEL: " + (sddm.kernelVersion ? sddm.kernelVersion : "Unknown"); font.family: monospaceFont.name; font.pixelSize: 14; color: "#ff6b52" }
-        Text { text: "NETWORK: SECURE"; font.family: monospaceFont.name; font.pixelSize: 14; color: "#ff6b52" }
-    }
-
-    Column {
-        anchors.top: parent.top
-        anchors.right: parent.right
-        x: -20
-        y: 20
-        spacing: 5
-        Text { text: "LOGIN ATTEMPTS: 3"; font.family: monospaceFont.name; font.pixelSize: 14; color: "#ff6b52" }
-        Text { text: "SYSTEM UPTIME: 23:45:12"; font.family: monospaceFont.name; font.pixelSize: 14; color: "#ff6b52" }
-        Text { text: "TIME: " + Qt.formatTime(new Date(), "hh:mm:ss"); font.family: monospaceFont.name; font.pixelSize: 14; color: "#ff6b52" }
-        Repeater {
-            model: 4
-            delegate: Text {
-                text: Math.floor(Math.random()*90+10) + "." + Math.floor(Math.random()*900+100) + "." + Math.floor(Math.random()*90+10) + "." + Math.floor(Math.random()*900+100)
-                font.family: monospaceFont.name
-                font.pixelSize: 12
-                color: "#ff6b52"
-                horizontalAlignment: Text.AlignRight
-            }
-        }
-    }
-
-    LoginBox {
-        id: loginForm
+        width: 450
+        height: 380
         anchors.centerIn: parent
-    }
+        color: "#40000000"
+        radius: 10
 
-    Column {
-        anchors.bottom: parent.bottom
-        anchors.left: parent.left
-        x: 20
-        y: -20
-        spacing: 5
-        Text { text: "SYSTEM"; font.family: monospaceFont.name; font.pixelSize: 12; color: "#ff6b52" }
-        Rectangle {
-            width: 100; height: 4; color: "#1e1e1e"
-            Rectangle { width: Math.random() * 100; height: 4; color: "#ff6b52" }
-        }
-        Text { text: "NETWORK"; font.family: monospaceFont.name; font.pixelSize: 12; color: "#ff6b52" }
-        Rectangle {
-            width: 100; height: 4; color: "#1e1e1e"
-            Rectangle { width: Math.random() * 100; height: 4; color: "#ff6b52" }
-        }
-    }
+        Column {
+            anchors.centerIn: parent
+            spacing: 15
 
-    Column {
-        anchors.bottom: parent.bottom
-        anchors.right: parent.right
-        x: -20
-        y: -20
-        spacing: 5
-        Text {
-            text: "MEMORY: " + (sddm.memoryUsed ? (sddm.memoryUsed / 1024).toFixed(2) + "G" : "N/A") + " / " +
-                  (sddm.memoryTotal ? (sddm.memoryTotal / 1024).toFixed(2) + "G" : "N/A")
-            font.family: monospaceFont.name; font.pixelSize: 14; color: "#ff6b52"
-        }
-        Text { text: "CPU: " + (sddm.cpuModel ? sddm.cpuModel : "Intel i7"); font.family: monospaceFont.name; font.pixelSize: 14; color: "#ff6b52" }
-        Text { text: "TEMP: " + Math.floor(Math.random() * 25 + 40) + "°C"; font.family: monospaceFont.name; font.pixelSize: 14; color: "#ff6b52" }
-    }
-
-    Column {
-        anchors.horizontalCenter: parent.horizontalCenter
-        anchors.bottom: parent.bottom
-        y: -30
-        spacing: 5
-        Image {
-            source: "images/shutdown_icon.png"
-            width: 48; height: 48
-            fillMode: Image.PreserveAspectFit
-            MouseArea {
-                anchors.fill: parent
-                onClicked: sddm.shutdown()
+            Image {
+                source: "images/user_icon.png"
+                width: 70
+                height: 70
+                fillMode: Image.PreserveAspectFit
+                anchors.horizontalCenter: parent.horizontalCenter
             }
-        }
-        Text {
-            text: "Shutdown"
-            font.family: monospaceFont.name
-            font.pixelSize: 14
-            color: "#ff6b52"
+
+            Item { width: 1; height: 20 }
+
+            TextField {
+                id: usernameField
+                placeholderText: "girquell"
+                width: 300
+                height: 45
+                font.pixelSize: 20
+                color: "white"
+                background: Rectangle {
+                    radius: 5
+                    color: "#202020"
+                    border.color: "#ff8800"
+                    border.width: 1
+                }
+            }
+
+            TextField {
+                id: passwordField
+                placeholderText: "Password"
+                echoMode: TextInput.Password
+                width: 300
+                height: 45
+                font.pixelSize: 20
+                color: "white"
+                background: Rectangle {
+                    radius: 5
+                    color: "#202020"
+                    border.color: "#ff8800"
+                    border.width: 1
+                }
+            }
+
+            Row {
+                anchors.horizontalCenter: parent.horizontalCenter
+                spacing: 20
+
+                Button {
+                    text: "BACK"
+                    width: 120
+                    height: 45
+                    font.pixelSize: 20
+                    background: Rectangle {
+                        radius: 5
+                        color: "#303030"
+                        border.color: "#ff8800"
+                        border.width: 1
+                    }
+                    onClicked: {
+                        usernameField.text = ""
+                        passwordField.text = ""
+                    }
+                }
+
+                Button {
+                    text: "LOGIN"
+                    width: 120
+                    height: 45
+                    font.pixelSize: 20
+                    background: Rectangle {
+                        radius: 5
+                        color: "#ff8800"
+                    }
+                    onClicked: {
+                        if (typeof sddm !== "undefined") {
+                            sddm.login(usernameField.text, passwordField.text, sddm.session)
+                        } else {
+                            console.log("Simulando login: ", usernameField.text)
+                        }
+                    }
+                }
+            }
         }
     }
 
     Text {
         text: "UNAUTHORIZED ACCESS WILL BE TRACED AND REPORTED"
-        font.family: monospaceFont.name
         font.pixelSize: 12
         color: "#ff6b52"
         anchors.bottom: parent.bottom
@@ -187,19 +170,7 @@ Rectangle {
     }
 
     Text {
-        text: "USER LOGGED"
-        font.family: monospaceFont.name
-        font.pixelSize: 14
-        color: "#ff6b52"
-        anchors.top: parent.top
-        anchors.right: parent.right
-        x: -20
-        y: 20
-    }
-
-    Text {
         text: "SDDM ALIVE"
-        font.family: monospaceFont.name
         font.pixelSize: 14
         color: "#ff6b52"
         anchors.top: parent.top
@@ -207,4 +178,4 @@ Rectangle {
         x: -20
         y: 40
     }
-}
+} 
