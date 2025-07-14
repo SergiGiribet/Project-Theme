@@ -1,6 +1,6 @@
 // Main.qml
 import QtQuick 2.0
-import sddmComponents 1.0 // Crucial for SDDM's functions (login, shutdown etc.)
+import SddmComponents 1.0 // Crucial for SDDM's functions (login, shutdown etc.)
 import "components" // To import your custom QML components
 
 Rectangle {
