@@ -13,3 +13,10 @@ Tecnofriki is a custom theme for SDDM inspired by the retro-futuristic Tokyo aes
 ## Installation
 
 1. Clone or download this repository into `/usr/share/sddm/themes/`.
+
+2. Change the current theme in `etc/sddm.conf`, add the next lines:
+
+````qml
+[Theme]
+Current=Project-Theme
+````
