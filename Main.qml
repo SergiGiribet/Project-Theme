@@ -1,154 +1,302 @@
-import QtQuick 2.12
-import QtQuick.Controls 2.12
+/***************************************************************************
+* Copyright (c) 2013 Reza Fatahilah Shah <rshah0385@kireihana.com>
+* Copyright (c) 2013 Abdurrahman AVCI <abdurrahmanavci@gmail.com>
+*
+* Permission is hereby granted, free of charge, to any person
+* obtaining a copy of this software and associated documentation
+* files (the "Software"), to deal in the Software without restriction,
+* including without limitation the rights to use, copy, modify, merge,
+* publish, distribute, sublicense, and/or sell copies of the Software,
+* and to permit persons to whom the Software is furnished to do so,
+* subject to the following conditions:
+*
+* The above copyright notice and this permission notice shall be included
+* in all copies or substantial portions of the Software.
+*
+* THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS
+* OR IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+* FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL
+* THE AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR
+* OTHER LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE,
+* ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE
+* OR OTHER DEALINGS IN THE SOFTWARE.
+*
+***************************************************************************/
+
+import QtQuick 2.0
 import SddmComponents 2.0
 
 Rectangle {
-    id: root
-    width: 1366
-    height: 768
-    color: "#000000"
+    width: 640
+    height: 480
+
+    LayoutMirroring.enabled: Qt.locale().textDirection == Qt.RightToLeft
+    LayoutMirroring.childrenInherit: true
 
     property int sessionIndex: session.index
 
-    // Fondo
-    Image {
+    TextConstants { id: textConstants }
+
+    Connections {
+        target: sddm
+        function onLoginSucceeded() {
+        }
+        function onInformationMessage(message) {
+        }
+        function onLoginFailed() {
+            pw_entry.text = ""
+        }
+    }
+
+    Background {
         anchors.fill: parent
-        source: Qt.resolvedUrl("images/Background.jpg")
+        source: Qt.resolvedUrl(config.background)
         fillMode: Image.PreserveAspectCrop
+        onStatusChanged: {
+            var defaultBackground = Qt.resolvedUrl(config.defaultBackground)
+            if (status == Image.Error && source != defaultBackground) {
+                source = defaultBackground
+            }
+        }
     }
 
-    // Capa oscura translúcida
     Rectangle {
         anchors.fill: parent
-        color: "#0a0a2a"
-        opacity: 0.6
-    }
+        color: "transparent"
+        //visible: primaryScreen
 
-    // Panel central
-    Rectangle {
-        width: 500
-        height: 400
-        anchors.centerIn: parent
-        color: "#111827"
-        radius: 10
-        opacity: 0.85
+        Rectangle {
+            width: 416; height: 262
+            color: "#00000000"
 
-        Column {
-            spacing: 20
             anchors.centerIn: parent
 
-            // Avatar y nombre
-            Column {
-                spacing: 5
-                anchors.horizontalCenter: parent.horizontalCenter
+            Image {
+                anchors.fill: parent
+                source: Qt.resolvedUrl("images/rectangle.png")
+            }
 
-                Rectangle {
-                    width: 96
-                    height: 96
-                    radius: 48
-                    color: "#444"
-                    border.color: "#aaa"
+            Image {
+                anchors.fill: parent
+                source: Qt.resolvedUrl("images/rectangle_overlay.png")
+                opacity: 0.1
+            }
 
-                    Image {
-                        anchors.fill: parent
-                        source: userModel.hasUserImage(userModel.lastUser) ?
-                            userModel.userImage(userModel.lastUser) :
-                            "qrc:/DefaultAvatar.png"
-                        fillMode: Image.PreserveAspectCrop
-                        smooth: true
-                        clip: true
+            Item {
+                anchors.margins: 20
+                anchors.fill: parent
+
+                Text {
+                    height: 50
+                    anchors.top: parent.top
+                    anchors.left: parent.left; anchors.right: parent.right
+
+                    color: "#0b678c"
+                    opacity: 0.75
+
+                    text: sddm.hostName
+
+                    font.bold: true
+                    font.pixelSize: 18
+                }
+
+                Column {
+                    anchors.centerIn: parent
+
+                    Row {
+                        Image { source: Qt.resolvedUrl("images/user_icon.png") }
+
+                        TextBox {
+                            id: user_entry
+
+                            width: 150; height: 30
+                            anchors.verticalCenter: parent.verticalCenter;
+
+                            text: userModel.lastUser
+
+                            font.pixelSize: 14
+
+                            KeyNavigation.backtab: layoutBox; KeyNavigation.tab: pw_entry
+                        }
+                    }
+
+                    Row {
+
+                        Image { source: Qt.resolvedUrl("images/lock.png") }
+
+                        PasswordBox {
+                            id: pw_entry
+                            width: 150; height: 30
+                            anchors.verticalCenter: parent.verticalCenter;
+
+                            tooltipBG: "CornflowerBlue"
+
+                            font.pixelSize: 14
+
+                            KeyNavigation.backtab: user_entry; KeyNavigation.tab: login_button
+
+                            Keys.onPressed: function (event) {
+                                if (event.key === Qt.Key_Return || event.key === Qt.Key_Enter) {
+                                    sddm.login(user_entry.text, pw_entry.text, sessionIndex)
+                                    event.accepted = true
+                                }
+                            }
+                        }
                     }
                 }
 
-                Text {
-                    text: userModel.lastUser
-                    color: "#fff"
-                    font.pixelSize: 22
-                    font.bold: true
-                    font.family: "Monospace"
+                ImageButton {
+                    id: login_button
+                    anchors.right: parent.right
+                    anchors.verticalCenter: parent.verticalCenter
+                    anchors.margins: 20
+
+                    source: Qt.resolvedUrl("images/login_normal.png")
+
+                    onClicked: sddm.login(user_entry.text, pw_entry.text, sessionIndex)
+
+		    KeyNavigation.backtab: pw_entry; KeyNavigation.tab: session
                 }
 
-                Text {
-                    text: "Arch Linux"
-                    color: "#aaa"
-                    font.pixelSize: 14
-                    font.family: "Monospace"
-                }
+                Item {
+                    height: 20
+                    anchors.bottom: parent.bottom
+                    anchors.left: parent.left; anchors.right: parent.right
 
-                Text {
-                    text: Qt.formatTime(new Date(), "hh:mm:ss")
-                    font.pixelSize: 14
-                    color: "#60d0ff"
-                    font.family: "Monospace"
-                }
-            }
+                    Row {
+                        id: buttonRow
+                        anchors.left: parent.left
+                        anchors.verticalCenter: parent.verticalCenter
 
-            // Entrada de contraseña
-            TextField {
-                id: pw_entry
-                width: 300
-                placeholderText: "Password"
-                echoMode: TextInput.Password
-                color: "#ffffff"
-                font.pixelSize: 14
-                font.family: "Monospace"
-                background: Rectangle {
-                    color: "#222"
-                    radius: 4
-                }
+                        spacing: 8
 
-                Keys.onReturnPressed: {
-                    sddm.login(userModel.lastUser, pw_entry.text, sessionIndex)
-                }
-            }
+                        ImageButton {
+                            id: system_button
+                            source: Qt.resolvedUrl("images/system_shutdown.png")
+                            onClicked: sddm.powerOff()
 
-            // Botón de login
-            Button {
-                text: "LOGIN"
-                width: 100
-                height: 35
-                font.bold: true
-                font.pixelSize: 14
-                background: Rectangle {
-                    color: "#3b82f6"
-                    radius: 6
-                }
-                onClicked: sddm.login(userModel.lastUser, pw_entry.text, sessionIndex)
-            }
+			    KeyNavigation.backtab: session; KeyNavigation.tab: reboot_button
+                        }
 
-            // Apagar
-            Button {
-                text: "Shutdown"
-                font.pixelSize: 12
-                onClicked: sddm.powerOff()
-                background: Rectangle {
-                    color: "#ef4444"
-                    radius: 6
+                        ImageButton {
+                            id: reboot_button
+                            source: Qt.resolvedUrl("images/system_reboot.png")
+                            onClicked: sddm.reboot()
+
+                            KeyNavigation.backtab: system_button; KeyNavigation.tab: suspend_button
+                        }
+
+                        ImageButton {
+                            id: suspend_button
+                            source: Qt.resolvedUrl("images/system_suspend.png")
+                            visible: sddm.canSuspend
+                            onClicked: sddm.suspend()
+
+                            KeyNavigation.backtab: reboot_button; KeyNavigation.tab: hibernate_button
+                        }
+
+                        ImageButton {
+                            id: hibernate_button
+                            source: Qt.resolvedUrl("images/system_hibernate.png")
+                            visible: sddm.canHibernate
+                            onClicked: sddm.hibernate()
+
+                            KeyNavigation.backtab: suspend_button; KeyNavigation.tab: session
+                        }
+                    }
+
+                    Timer {
+                        id: time
+                        interval: 100
+                        running: true
+                        repeat: true
+
+                        onTriggered: {
+                            dateTime.text = Qt.formatDateTime(new Date(), "dddd, dd MMMM yyyy HH:mm AP")
+                        }
+                    }
+
+                    Text {
+                        id: dateTime
+                        anchors.right: parent.right
+                        anchors.bottom: parent.bottom
+                        horizontalAlignment: Text.AlignRight
+
+                        color: "#0b678c"
+                        font.bold: true
+                        font.pixelSize: 12
+                    }
                 }
             }
         }
     }
 
-    // Esquina superior izquierda - sistema
-    Column {
-        anchors.left: parent.left
-        anchors.top: parent.top
-        anchors.margins: 10
-        spacing: 2
+    Rectangle {
+        id: actionBar
+        anchors.top: parent.top;
+        anchors.horizontalCenter: parent.horizontalCenter
+        width: parent.width; height: 40
 
-        Text { text: "SYSTEM: ARCH LINUX"; color: "#66ccff"; font.pixelSize: 10; font.family: "Monospace" }
-        Text { text: "KERNEL: 6.1.5"; color: "#66ccff"; font.pixelSize: 10; font.family: "Monospace" }
-        Text { text: "TIME: " + Qt.formatTime(new Date(), "hh:mm:ss"); color: "#66ccff"; font.pixelSize: 10; font.family: "Monospace" }
+        Row {
+            anchors.left: parent.left
+            anchors.margins: 5
+            height: parent.height
+            spacing: 5
+
+            Text {
+                height: parent.height
+                anchors.verticalCenter: parent.verticalCenter
+
+                text: textConstants.session
+                font.pixelSize: 14
+                verticalAlignment: Text.AlignVCenter
+            }
+
+            ComboBox {
+                id: session
+                width: 245
+                anchors.verticalCenter: parent.verticalCenter
+
+                arrowIcon: Qt.resolvedUrl("angle-down.png")
+
+                model: sessionModel
+                index: sessionModel.lastIndex
+
+                font.pixelSize: 14
+
+                KeyNavigation.backtab: hibernate_button; KeyNavigation.tab: layoutBox
+            }
+
+            Text {
+                height: parent.height
+                anchors.verticalCenter: parent.verticalCenter
+
+                visible: layoutBox.visible
+
+                text: textConstants.layout
+                font.pixelSize: 14
+                verticalAlignment: Text.AlignVCenter
+            }
+
+            LayoutBox {
+                id: layoutBox
+                width: 90
+                anchors.verticalCenter: parent.verticalCenter
+                font.pixelSize: 14
+
+                visible: keyboard.enabled && keyboard.layouts.length > 0
+
+                arrowIcon: Qt.resolvedUrl("angle-down.png")
+
+                KeyNavigation.backtab: session; KeyNavigation.tab: user_entry
+            }
+        }
     }
 
-    // Esquina inferior derecha - stats
-    Text {
-        anchors.bottom: parent.bottom
-        anchors.right: parent.right
-        anchors.margins: 10
-        color: "#cccccc"
-        font.pixelSize: 10
-        font.family: "Monospace"
-        text: "MEMORY: 2.1GB / 8.0GB\nCPU: 28%  |  52ºC\nUPTIME: 2d 10h 26m"
+    Component.onCompleted: {
+        if (user_entry.text === "")
+            user_entry.focus = true
+        else
+            pw_entry.focus = true
     }
 }
