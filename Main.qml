@@ -1,128 +1,196 @@
 // Main.qml
 import QtQuick 2.0
-import SddmComponents 2.0 // Crucial for SDDM's functions (login, shutdown etc.)
-import "components" // To import your custom QML components
+import SddmComponents 2.0
+import QtGraphicalEffects 1.0
+import "components"
 
 Rectangle {
     id: root
     width: Screen.width
     height: Screen.height
-    color: "#000000" // Fallback black background
+    color: "#000000"
 
-    // 1. Load Custom Font
-    // Make sure 'fonts/YourMonospaceFont.ttf' exists in your theme directory
     FontLoader {
         id: monospaceFont
         source: "fonts/YourMonospaceFont.ttf"
     }
 
-    // 2. Background Image
     Image {
-        source: "images/background.jpg" // Make sure this image exists in images/
+        id: bg
+        source: "images/background.jpg"
         anchors.fill: parent
         fillMode: Image.PreserveAspectCrop
-        // opacity: 0.9 // Adjust if you want it slightly less vibrant
     }
 
-    // 3. Login Box (using your component)
-    LoginBox {
-        id: loginForm
-        anchors.centerIn: parent // Centers the entire login box on the screen
+    Rectangle {
+        id: overlay
+        anchors.fill: parent
+        color: "#000000AA"
     }
 
-    // 4. Top-Left System Information
+    Rectangle {
+        id: scanlineOverlay
+        anchors.fill: parent
+        opacity: 0.05
+        layer.enabled: true
+        layer.effect: FastBlur {
+            radius: 2
+        }
+        Rectangle {
+            anchors.fill: parent
+            gradient: Gradient {
+                GradientStop { position: 0.5; color: "#ff6b52" }
+                GradientStop { position: 0.51; color: "transparent" }
+            }
+            rotation: 90
+            width: parent.width
+            height: parent.height
+        }
+    }
+
+    Rectangle {
+        id: gridOverlay
+        anchors.fill: parent
+        opacity: 0.1
+        Canvas {
+            anchors.fill: parent
+            onPaint: {
+                var ctx = getContext("2d")
+                ctx.clearRect(0, 0, width, height)
+                ctx.strokeStyle = "rgba(255,107,82,0.2)"
+                for (var i = 0; i < width; i += 40) {
+                    ctx.beginPath()
+                    ctx.moveTo(i, 0)
+                    ctx.lineTo(i, height)
+                    ctx.stroke()
+                }
+                for (var j = 0; j < height; j += 40) {
+                    ctx.beginPath()
+                    ctx.moveTo(0, j)
+                    ctx.lineTo(width, j)
+                    ctx.stroke()
+                }
+            }
+        }
+    }
+
+    Rectangle {
+        anchors.fill: parent
+        border.color: "#ff6b52"
+        border.width: 1
+        anchors.margins: 4
+        opacity: 0.2
+    }
+
     Column {
         anchors.top: parent.top
         anchors.left: parent.left
-        x: 20 // Margin from left edge
-        y: 20 // Margin from top edge
+        x: 20
+        y: 20
         spacing: 5
 
-        Text {
-            text: "SYSTEM: ABP Linux"
-            font.family: monospaceFont.name
-            font.pixelSize: 16
-            color: "#ff8800"
-        }
-        Text {
-            // sddm.kernelVersion is a dynamic property provided by SDDM
-            text: "Kernel: " + (sddm.kernelVersion ? sddm.kernelVersion : "Unknown")
-            font.family: monospaceFont.name
-            font.pixelSize: 16
-            color: "#ff8800"
-        }
-        Text {
-            // Note: "FPS" is usually for games. This might be a placeholder or date.
-            // If you want a static date: Qt.formatDate(new Date(), "yyyy.MM.dd")
-            text: "FPS: 20.12.13" // Hardcoded as in your image, if it's not a real FPS counter
-            font.family: monospaceFont.name
-            font.pixelSize: 16
-            color: "#ff8800"
+        Text { text: "SECURITY LEVEL: HIGH"; font.family: monospaceFont.name; font.pixelSize: 14; color: "#ff6b52" }
+        Text { text: "SYSTEM: ARCH LINUX"; font.family: monospaceFont.name; font.pixelSize: 14; color: "#ff6b52" }
+        Text { text: "KERNEL: " + (sddm.kernelVersion ? sddm.kernelVersion : "Unknown"); font.family: monospaceFont.name; font.pixelSize: 14; color: "#ff6b52" }
+        Text { text: "NETWORK: SECURE"; font.family: monospaceFont.name; font.pixelSize: 14; color: "#ff6b52" }
+    }
+
+    Column {
+        anchors.top: parent.top
+        anchors.right: parent.right
+        x: -20
+        y: 20
+        spacing: 5
+        Text { text: "LOGIN ATTEMPTS: 3"; font.family: monospaceFont.name; font.pixelSize: 14; color: "#ff6b52" }
+        Text { text: "SYSTEM UPTIME: 23:45:12"; font.family: monospaceFont.name; font.pixelSize: 14; color: "#ff6b52" }
+        Text { text: "TIME: " + Qt.formatTime(new Date(), "hh:mm:ss"); font.family: monospaceFont.name; font.pixelSize: 14; color: "#ff6b52" }
+        Repeater {
+            model: 4
+            delegate: Text {
+                text: Math.floor(Math.random()*90+10) + "." + Math.floor(Math.random()*900+100) + "." + Math.floor(Math.random()*90+10) + "." + Math.floor(Math.random()*900+100)
+                font.family: monospaceFont.name
+                font.pixelSize: 12
+                color: "#ff6b52"
+                horizontalAlignment: Text.AlignRight
+            }
         }
     }
 
-    // 5. Bottom-Right System Information
+    LoginBox {
+        id: loginForm
+        anchors.centerIn: parent
+    }
+
+    Column {
+        anchors.bottom: parent.bottom
+        anchors.left: parent.left
+        x: 20
+        y: -20
+        spacing: 5
+        Text { text: "SYSTEM"; font.family: monospaceFont.name; font.pixelSize: 12; color: "#ff6b52" }
+        Rectangle {
+            width: 100; height: 4; color: "#1e1e1e"
+            Rectangle { width: Math.random() * 100; height: 4; color: "#ff6b52" }
+        }
+        Text { text: "NETWORK"; font.family: monospaceFont.name; font.pixelSize: 12; color: "#ff6b52" }
+        Rectangle {
+            width: 100; height: 4; color: "#1e1e1e"
+            Rectangle { width: Math.random() * 100; height: 4; color: "#ff6b52" }
+        }
+    }
+
     Column {
         anchors.bottom: parent.bottom
         anchors.right: parent.right
-        x: -20 // Margin from right edge
-        y: -20 // Margin from bottom edge
+        x: -20
+        y: -20
         spacing: 5
-        horizontalAlignment: Text.AlignRight // Align text to the right within the column
-
         Text {
-            // sddm.memoryUsed and sddm.memoryTotal are dynamic properties
-            text: "MEMORY: " +
-                  (sddm.memoryUsed ? (sddm.memoryUsed / 1024).toFixed(2) + "G" : "N/A") + " / " +
+            text: "MEMORY: " + (sddm.memoryUsed ? (sddm.memoryUsed / 1024).toFixed(2) + "G" : "N/A") + " / " +
                   (sddm.memoryTotal ? (sddm.memoryTotal / 1024).toFixed(2) + "G" : "N/A")
-            font.family: monospaceFont.name
-            font.pixelSize: 16
-            color: "#ff8800"
+            font.family: monospaceFont.name; font.pixelSize: 14; color: "#ff6b52"
         }
-        Text {
-            // sddm.cpuModel is a dynamic property
-            text: "CPU: " + (sddm.cpuModel ? sddm.cpuModel : "Intel XXXXXX")
-            font.family: monospaceFont.name
-            font.pixelSize: 16
-            color: "#ff8800"
-        }
+        Text { text: "CPU: " + (sddm.cpuModel ? sddm.cpuModel : "Intel i7"); font.family: monospaceFont.name; font.pixelSize: 14; color: "#ff6b52" }
+        Text { text: "TEMP: " + Math.floor(Math.random() * 25 + 40) + "°C"; font.family: monospaceFont.name; font.pixelSize: 14; color: "#ff6b52" }
     }
 
-    // 6. Shutdown Button/Icon (bottom center)
     Column {
         anchors.horizontalCenter: parent.horizontalCenter
         anchors.bottom: parent.bottom
-        y: -30 // Adjust position from bottom
-        spacing: 10
-
+        y: -30
+        spacing: 5
         Image {
-            id: shutdownIcon
-            source: "images/shutdown_icon.png" // Make sure this image exists
-            width: 48 // Adjust size
-            height: 48 // Adjust size
-            anchors.horizontalCenter: parent.horizontalCenter
+            source: "images/shutdown_icon.png"
+            width: 48; height: 48
             fillMode: Image.PreserveAspectFit
-
             MouseArea {
                 anchors.fill: parent
-                onClicked: sddm.shutdown() // Action to shutdown
+                onClicked: sddm.shutdown()
             }
         }
         Text {
             text: "Shutdown"
             font.family: monospaceFont.name
             font.pixelSize: 14
-            color: "white"
-            anchors.horizontalCenter: parent.horizontalCenter
+            color: "#ff6b52"
         }
     }
 
-    // Optional: Other texts/logos from your image (bottom left, top right)
     Text {
-        text: "USER LOGGED" // Hardcoded placeholder
+        text: "UNAUTHORIZED ACCESS WILL BE TRACED AND REPORTED"
+        font.family: monospaceFont.name
+        font.pixelSize: 12
+        color: "#ff6b52"
+        anchors.bottom: parent.bottom
+        anchors.horizontalCenter: parent.horizontalCenter
+        y: -80
+    }
+
+    Text {
+        text: "USER LOGGED"
         font.family: monospaceFont.name
         font.pixelSize: 14
-        color: "#ff8800"
+        color: "#ff6b52"
         anchors.top: parent.top
         anchors.right: parent.right
         x: -20
@@ -130,15 +198,13 @@ Rectangle {
     }
 
     Text {
-        text: "SDDM ALIVE" // Hardcoded placeholder
+        text: "SDDM ALIVE"
         font.family: monospaceFont.name
         font.pixelSize: 14
-        color: "#ff8800"
+        color: "#ff6b52"
         anchors.top: parent.top
         anchors.right: parent.right
         x: -20
         y: 40
     }
-
-    // ... (any other elements you need)
 }
