@@ -1,6 +1,6 @@
 // components/LoginBox.qml
 import QtQuick 2.0
-import SddmComponents 1.0 // For TextField, PasswordField, Button
+import SddmComponents 2.0 // For TextField, PasswordField, Button
 
 Item {
     id: loginBoxRoot
