@@ -281,8 +281,8 @@ Rectangle {
                 background: Rectangle {
                     radius: 5
                     color: "#202020"
-                    border.color: "#ff6b52"
-                    border.width: 1
+                    border.bottom.color: "#ff6b52"
+                    border.bottom.width: 1
                 }
                 Keys.onPressed: (event) => {
                     if (event.key === Qt.Enter || event.key === Qt.Key_Return) {
