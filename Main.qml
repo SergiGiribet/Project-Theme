@@ -212,7 +212,7 @@ Rectangle {
                 spacing: 5
                 Text {
                     id: usernameDisplay
-                    // text: "Usuario" // Siempre mostrará "Usuario"
+                    text: text: typeof userModel !== "undefined" && userModel.lastUser ? userModel.lastUser.toUpperCase() : "UnKnown"
                     font.pixelSize: 24
                     font.bold: true
                     color: "white"
@@ -247,7 +247,7 @@ Rectangle {
 
             TextField {
                 id: usernameField
-                text: "" // Campo de usuario siempre vacío, editable
+                text: userModel.lastUser
                 readOnly: false // Es editable para que el usuario pueda escribir
                 placeholderText: "Username" // Texto que aparece cuando el campo está vacío
                 width: 300
