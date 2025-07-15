@@ -243,7 +243,6 @@ Rectangle {
                         anchors.verticalCenter: parent.verticalCenter
                     }
                 }
-                visible: false // Oculta el nombre de usuario y estado por defecto
             }
 
             TextField {
@@ -267,6 +266,7 @@ Rectangle {
                         event.accepted = true
                     }
                 }
+                visible: false // Oculta el nombre de usuario y estado por defecto                
             }
 
             TextField {
