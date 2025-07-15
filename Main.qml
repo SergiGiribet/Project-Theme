@@ -198,8 +198,8 @@ Rectangle {
 
             Image {
                 source: "images/user_icon.png" // Asegúrate de que esta ruta sea correcta
-                width: 70
-                height: 70
+                width: 100
+                height: 100
                 fillMode: Image.PreserveAspectFit
                 // Si SDDM expone avatares de usuario, podrías usar algo como:
                 // source: (typeof sddm !== "undefined" && sddm.users.length > 0 && sddm.users[sddm.currentUser] && sddm.users[sddm.currentUser].face) ? sddm.users[sddm.currentUser].face : "images/user_icon.png"
@@ -441,7 +441,7 @@ Rectangle {
     // Asegurarse de que el campo de usuario tenga el foco al iniciar
     Window.onVisibilityChanged: {
         if (visibility === Window.Visible) {
-            usernameField.forceActiveFocus() // Siempre le damos el foco al campo de usuario
+            passwordField.forceActiveFocus() // Siempre le damos el foco al campo de usuario
         }
     }
 }
