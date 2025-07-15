@@ -2,13 +2,27 @@
 import QtQuick 2.15
 import QtQuick.Controls 2.15
 import QtGraphicalEffects 1.0
-import QtQuick.Window 2.15 // Necesario para Window.onVisibilityChanged si quieres manejar el foco al mostrar
+import QtQuick.Window 2.15
 
 Rectangle {
     id: root
     width: 1024
     height: 768
     color: "#000000"
+
+    // Timer para actualizar la hora y la fecha si no se usa sddm.time/date
+    // En un entorno SDDM real, sddm.time/date se actualizarán automáticamente.
+    Timer {
+        id: dateTimeTimer
+        interval: 1000 // Actualizar cada segundo
+        running: true
+        repeat: true
+        onTriggered: {
+            // Esto forzará la reevaluación de los textos de hora y fecha
+            // si no se están actualizando automáticamente por sddm.
+            // Para SDDM real, no es estrictamente necesario si sddm.time/date son reactivos.
+        }
+    }
 
     // Fondo y capa oscura
     Image {
@@ -89,12 +103,13 @@ Rectangle {
             color: "#ff6b52"
         }
         Text {
-            text: "KERNEL: 6.5.3"
+            text: "KERNEL: 6.5.3" // Este valor es estático, SDDM no suele exponerlo.
+                                   // Podrías obtenerlo vía script en un SDDM más complejo.
             font.pixelSize: 14
             color: "#ff6b52"
         }
         Text {
-            text: "# NETWORKS: SECURE"
+            text: "# NETWORKS: SECURE" // Este valor es estático. Podrías obtener el estado de red vía script.
             font.pixelSize: 14
             color: "#ff6b52"
         }
@@ -108,51 +123,60 @@ Rectangle {
         x: -20
         y: 20
         spacing: 5
-        
 
         Text {
-            text: "LOGIN ATTEMPTS: 0"
+            text: "LOGIN ATTEMPTS: 0" // Este valor es estático. SDDM no suele exponerlo directamente.
             font.pixelSize: 14
             color: "#ff6b52"
-            
+            width: parent.width
+            horizontalAlignment: Text.AlignRight
         }
         Text {
-            text: "SYSTEM UPTIME: 23:45:12" // Esto debería ser dinámico si sddm lo provee
+            // SDDM expone sddm.uptime si está disponible. Si no, necesitarías un script.
+            text: "SYSTEM UPTIME: " + (typeof sddm !== "undefined" && sddm.uptime ? sddm.uptime : "00:00:00")
             font.pixelSize: 14
             color: "#ff6b52"
-            
+            width: parent.width
+            horizontalAlignment: Text.AlignRight
         }
         Text {
-            // Usamos una expresión JavaScript para obtener la hora actual
-            text: "TIME: " + Qt.formatTime(new Date(), "hh:mm:ss")
+            // SDDM expone sddm.time. Si no está definido (ej. qmlscene), usamos Qt.formatTime(new Date()).
+            text: "TIME: " + (typeof sddm !== "undefined" && sddm.time ? sddm.time : Qt.formatTime(new Date(), "hh:mm:ss"))
             font.pixelSize: 14
             color: "#ff6b52"
-            
+            width: parent.width
+            horizontalAlignment: Text.AlignRight
         }
         Item { width: 1; height: 10 } // Espacio
         Text {
+            // Las IPs son estáticas aquí. Para obtener IPs reales, necesitarías un script del sistema
+            // y una forma de pasar esa información al QML, lo cual no es trivial sin SddmComponents.
             text: "83.695.90.616"
             font.pixelSize: 14
             color: "#ff6b52"
-            
+            width: parent.width
+            horizontalAlignment: Text.AlignRight
         }
         Text {
             text: "16.797.56.353"
             font.pixelSize: 14
             color: "#ff6b52"
-            
+            width: parent.width
+            horizontalAlignment: Text.AlignRight
         }
         Text {
             text: "19.614.78.952"
             font.pixelSize: 14
             color: "#ff6b52"
-            
+            width: parent.width
+            horizontalAlignment: Text.AlignRight
         }
         Text {
             text: "14.624.11.248"
             font.pixelSize: 14
             color: "#ff6b52"
-            
+            width: parent.width
+            horizontalAlignment: Text.AlignRight
         }
     }
 
@@ -177,16 +201,18 @@ Rectangle {
                 width: 70
                 height: 70
                 fillMode: Image.PreserveAspectFit
+                // Si SDDM expone avatares de usuario, podrías usar algo como:
+                // source: (typeof sddm !== "undefined" && sddm.users.length > 0 && sddm.users[sddm.currentUser] && sddm.users[sddm.currentUser].face) ? sddm.users[sddm.currentUser].face : "images/user_icon.png"
                 anchors.horizontalCenter: parent.horizontalCenter
             }
 
-            // Nombre de usuario y estado (Girquell, Arch Linux, Online)
+            // Nombre de usuario y estado (siempre "Usuario" y editable)
             Column {
-                anchors.horizontalCenter: parent.horizontalCenter
+                anchors.horizontalCenter: parent.horizontalCenter // Centra la columna entera
                 spacing: 5
                 Text {
                     id: usernameDisplay
-                    text: "girquell" // Nombre de usuario por defecto como en la imagen
+                    // text: "Usuario" // Siempre mostrará "Usuario"
                     font.pixelSize: 24
                     font.bold: true
                     color: "white"
@@ -194,14 +220,14 @@ Rectangle {
                     width: parent.width
                 }
                 Text {
-                    text: "Arch Linux"
+                    text: "Arch Linux" // Este valor es estático.
                     font.pixelSize: 16
                     color: "#ff6b52"
                     horizontalAlignment: Text.AlignHCenter
                     width: parent.width
                 }
                 Row {
-                    anchors.horizontalCenter: parent.horizontalCenter
+                    anchors.horizontalCenter: parent.horizontalCenter // Centra la fila entera
                     spacing: 5
                     Rectangle {
                         width: 10
@@ -211,7 +237,7 @@ Rectangle {
                         anchors.verticalCenter: parent.verticalCenter
                     }
                     Text {
-                        text: "ONLINE"
+                        text: "ONLINE" // Este valor es estático. Necesitarías un script para el estado de red.
                         font.pixelSize: 14
                         color: "white"
                         anchors.verticalCenter: parent.verticalCenter
@@ -219,12 +245,11 @@ Rectangle {
                 }
             }
 
-
             TextField {
                 id: usernameField
-                // No hay placeholderText aquí, el nombre de usuario ya está "escrito"
-                text: "Girquell" // El texto ya viene pre-rellenado como en la imagen
-                readOnly: true // Para que no se pueda editar si ya está pre-rellenado
+                text: "" // Campo de usuario siempre vacío, editable
+                readOnly: false // Es editable para que el usuario pueda escribir
+                placeholderText: "Username" // Texto que aparece cuando el campo está vacío
                 width: 300
                 height: 45
                 font.pixelSize: 20
@@ -233,8 +258,14 @@ Rectangle {
                 background: Rectangle {
                     radius: 5
                     color: "#202020"
-                    border.color: "#ff6b52" // Borde del color de énfasis
+                    border.color: "#ff6b52"
                     border.width: 1
+                }
+                Keys.onPressed: (event) => {
+                    if (event.key === Qt.Enter || event.key === Qt.Key_Return) {
+                        passwordField.forceActiveFocus() // Pasa el foco al campo de contraseña al presionar Enter
+                        event.accepted = true
+                    }
                 }
             }
 
@@ -250,7 +281,7 @@ Rectangle {
                 background: Rectangle {
                     radius: 5
                     color: "#202020"
-                    border.color: "#ff6b52" // Borde del color de énfasis
+                    border.color: "#ff6b52"
                     border.width: 1
                 }
                 Keys.onPressed: (event) => {
@@ -274,8 +305,8 @@ Rectangle {
                     contentItem: Text {
                         text: parent.text
                         font: parent.font
-                        color: parent.pressed ? "#ff6b52" : "white" // Cambia el color del texto al presionar
-
+                        color: parent.pressed ? "#ff6b52" : "white"
+                        horizontalAlignment: Text.AlignHCenter
                         verticalAlignment: Text.AlignVCenter
                     }
                     background: Rectangle {
@@ -285,10 +316,8 @@ Rectangle {
                         border.width: 1
                     }
                     onClicked: {
-                        // Aquí deberías definir qué significa "BACK" en tu contexto SDDM.
-                        // Podría ser limpiar los campos o regresar a una selección de usuario.
-                        passwordField.text = "" // Solo limpiar la contraseña por ahora
-                        passwordField.forceActiveFocus() // Enfocar la contraseña de nuevo
+                        passwordField.text = "" // Limpia el campo de contraseña
+                        usernameField.forceActiveFocus() // Vuelve el foco al campo de usuario
                     }
                 }
 
@@ -302,20 +331,19 @@ Rectangle {
                     contentItem: Text {
                         text: parent.text
                         font: parent.font
-                        color: parent.pressed ? "white" : "black" // Cambia el color del texto al presionar
-
+                        color: parent.pressed ? "white" : "black"
+                        horizontalAlignment: Text.AlignHCenter
                         verticalAlignment: Text.AlignVCenter
                     }
                     background: Rectangle {
                         radius: 5
-                        color: "#ff6b52" // Color de fondo del botón LOGIN
+                        color: "#ff6b52"
                     }
                     onClicked: {
                         if (typeof sddm !== "undefined") {
                             sddm.login(usernameField.text, passwordField.text, sddm.session)
                         } else {
                             console.log("Simulando login para usuario:", usernameField.text)
-                            // En un entorno de prueba, podrías mostrar un mensaje o simular un éxito/fallo
                         }
                     }
                 }
@@ -340,8 +368,8 @@ Rectangle {
         font.pixelSize: 12
         color: "#ff6b52"
         anchors.bottom: parent.bottom
-
-        y: -40 // Ajusta la posición para que quede más abajo como en la imagen
+        anchors.horizontalCenter: parent.horizontalCenter
+        y: -40
     }
 
     // --- INFORMACIÓN INFERIOR DERECHA (Sistema, Red, Memoria, CPU, Temp) ---
@@ -352,25 +380,30 @@ Rectangle {
         x: -20
         y: -20
         spacing: 5
-        
 
         Text {
-            text: "MEMORY: 2.1GB / 8.0GB" // Esto debería ser dinámico si sddm lo provee
+            // Estos valores son estáticos. Para hacerlos reales, necesitarías un script externo
+            // y un mecanismo en QML para leer la salida de ese script (ej. un SddmComponents.SystemStatus
+            // o un modelo JavaScript que se actualice periódicamente).
+            text: "MEMORY: 2.1GB / 8.0GB"
             font.pixelSize: 14
             color: "#ff6b52"
-            
+            width: parent.width
+            horizontalAlignment: Text.AlignRight
         }
         Text {
-            text: "CPU: INTEL i7-6750" // Esto debería ser dinámico si sddm lo provee
+            text: "CPU: INTEL i7-6750"
             font.pixelSize: 14
             color: "#ff6b52"
-            
+            width: parent.width
+            horizontalAlignment: Text.AlignRight
         }
         Text {
-            text: "TEMP: 45°C" // Esto debería ser dinámico si sddm lo provee
+            text: "TEMP: 45°C"
             font.pixelSize: 14
             color: "#ff6b52"
-            
+            width: parent.width
+            horizontalAlignment: Text.AlignRight
         }
         Item { width: 1; height: 10 } // Espacio
         Row {
@@ -405,10 +438,12 @@ Rectangle {
         }
     }
 
-    // Asegurarse de que el campo de contraseña tenga el foco al iniciar
+    // Asegurarse de que el campo de usuario tenga el foco al iniciar
     Window.onVisibilityChanged: {
         if (visibility === Window.Visible) {
-            passwordField.forceActiveFocus()
+            usernameField.forceActiveFocus() // Siempre le damos el foco al campo de usuario
         }
     }
 }
+
+    
