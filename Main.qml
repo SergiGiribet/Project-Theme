@@ -271,6 +271,7 @@ Rectangle {
 
             TextField {
                 id: passwordField
+                focus: true // Foco inicial en el campo de contraseña
                 placeholderText: "Password"
                 echoMode: TextInput.Password
                 width: 300
@@ -278,19 +279,35 @@ Rectangle {
                 font.pixelSize: 20
                 color: "white"
                 horizontalAlignment: TextInput.AlignHCenter
-                background: Rectangle {
-                    radius: 5
-                    color: "#202020"
-                    border.bottom.color: "#ff6b52"
-                    border.bottom.width: 1
+
+                background: Item {
+                    width: parent.width
+                    height: parent.height
+
+                    Rectangle {
+                        anchors.fill: parent
+                        color: "#202020"
+                        radius: 5
+                    }
+
+                    Rectangle {
+                        // Este es el borde inferior
+                        width: parent.width
+                        height: 1
+                        color: "#ff6b52"
+                        anchors.horizontalCenter: parent.horizontalCenter
+                        anchors.bottom: parent.bottom
+                    }
                 }
+
                 Keys.onPressed: (event) => {
-                    if (event.key === Qt.Enter || event.key === Qt.Key_Return) {
-                        loginButton.clicked() // Activa el botón de login al presionar Enter
+                    if (event.key === Qt.Key_Enter || event.key === Qt.Key_Return) {
+                        loginButton.clicked()
                         event.accepted = true
                     }
                 }
             }
+
 
             Row {
                 anchors.horizontalCenter: parent.horizontalCenter
