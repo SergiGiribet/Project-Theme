@@ -243,13 +243,13 @@ Rectangle {
                         anchors.verticalCenter: parent.verticalCenter
                     }
                 }
+                visible: false // Oculta el nombre de usuario y estado por defecto
             }
 
             TextField {
                 id: usernameField
                 text: userModel.lastUser
                 readOnly: false // Es editable para que el usuario pueda escribir
-                placeholderText: "Username" // Texto que aparece cuando el campo está vacío
                 width: 300
                 height: 45
                 font.pixelSize: 20
