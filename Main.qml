@@ -212,7 +212,7 @@ Rectangle {
                 spacing: 5
                 Text {
                     id: usernameDisplay
-                    text: text: typeof userModel !== "undefined" && userModel.lastUser ? userModel.lastUser.toUpperCase() : "UnKnown"
+                    text: typeof userModel !== "undefined" && userModel.lastUser ? userModel.lastUser.toUpperCase() : "UnKnown"
                     font.pixelSize: 24
                     font.bold: true
                     color: "white"
