@@ -198,8 +198,8 @@ Rectangle {
 
             Image {
                 source: "images/user_icon.png" // Asegúrate de que esta ruta sea correcta
-                width: 100
-                height: 100
+                width: 200
+                height: 200
                 fillMode: Image.PreserveAspectFit
                 // Si SDDM expone avatares de usuario, podrías usar algo como:
                 // source: (typeof sddm !== "undefined" && sddm.users.length > 0 && sddm.users[sddm.currentUser] && sddm.users[sddm.currentUser].face) ? sddm.users[sddm.currentUser].face : "images/user_icon.png"
