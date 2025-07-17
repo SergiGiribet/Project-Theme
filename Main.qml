@@ -350,8 +350,7 @@ Rectangle {
             height: 24
             fillMode: Image.PreserveAspectFit
             anchors.verticalCenter: parent.verticalCenter
-            anchors.left: parent.left
-            anchors.rightMargin: 20 // Espacio entre el icono y el texto
+            anchors.left: parent.left + 30
         }
         
         text: "UNAUTHORIZED ACCESS WILL BE TRACED AND REPORTED"
