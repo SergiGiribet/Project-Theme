@@ -37,24 +37,24 @@ Rectangle {
         color: "#b9000000" // Capa semi-transparente oscura sobre el fondo
     }
 
-    // Efecto de Scanline
-    Rectangle {
-        id: scanlineOverlay
-        anchors.fill: parent
-        opacity: 0.05 // Más sutil como en la imagen
-        layer.enabled: true
-        layer.effect: FastBlur {
-            radius: 2
-        }
-        Rectangle {
-            anchors.fill: parent
-            gradient: Gradient {
-                GradientStop { position: 0.5; color: "#ff6b52" } // Color de la línea
-                GradientStop { position: 0.51; color: "transparent" }
-            }
-            rotation: 90
-        }
-    }
+    // // Efecto de Scanline
+    // Rectangle {
+    //     id: scanlineOverlay
+    //     anchors.fill: parent
+    //     opacity: 0.05 // Más sutil como en la imagen
+    //     layer.enabled: true
+    //     layer.effect: FastBlur {
+    //         radius: 2
+    //     }
+    //     Rectangle {
+    //         anchors.fill: parent
+    //         gradient: Gradient {
+    //             GradientStop { position: 0.5; color: "#ff6b52" } // Color de la línea
+    //             GradientStop { position: 0.51; color: "transparent" }
+    //         }
+    //         rotation: 90
+    //     }
+    // }
 
     // Efecto de Cuadrícula
     Rectangle {
@@ -189,7 +189,7 @@ Rectangle {
          color: "#00000000" // Fondo semi-transparente oscuro para la caja
         radius: 10
         // border.color: "#ff6b52" // Borde rojo/naranja
-        border.width: 1
+        //border.width: 1
 
         Column {
             anchors.centerIn: parent
