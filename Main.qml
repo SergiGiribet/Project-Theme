@@ -273,6 +273,10 @@ Rectangle {
                     height: 45
                     font.pixelSize: 20
                     font.bold: true
+
+                    // CAMBIA A CURSOR DE MANO
+                    cursor.shape: Qt.PointingHandCursor
+                    
                     contentItem: Text {
                         text: parent.text
                         font: parent.font
@@ -299,6 +303,10 @@ Rectangle {
                     height: 45
                     font.pixelSize: 20
                     font.bold: true
+
+                    // CAMBIA A CURSOR DE MANO
+                    cursor.shape: Qt.PointingHandCursor
+
                     contentItem: Text {
                         text: parent.text
                         font: parent.font
@@ -339,7 +347,7 @@ Rectangle {
         width: 24
         height: 24
         fillMode: Image.PreserveAspectFit
-        y: -40
+        y: -120
     }
 
     Text {
@@ -349,7 +357,7 @@ Rectangle {
         color: "#ff6b52"
         anchors.bottom: parent.bottom
         anchors.horizontalCenter: parent.horizontalCenter
-        y: -40
+        y: -120
     }
 
     // --- Shutdown Button ---
@@ -360,6 +368,10 @@ Rectangle {
         y: -90 // Adjust position to be above the warning text
         width: 150 // Example width
         height: 50 // Example height
+
+        // CAMBIA A CURSOR DE MANO
+        cursor.shape: Qt.PointingHandCursor
+        
         contentItem: Row {
             spacing: 10
             anchors.centerIn: parent
