@@ -232,7 +232,6 @@ Rectangle {
                 height: 45
                 font.pixelSize: 20
                 color: "white"
-                horizontalAlignment: parent.horizontalCenter
                 horizontalAlignment: TextInput.AlignHLeft
 
                 background: Item {
