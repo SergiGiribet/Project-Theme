@@ -351,7 +351,7 @@ Rectangle {
             fillMode: Image.PreserveAspectFit
             anchors.verticalCenter: parent.verticalCenter
             anchors.right: parent.right
-            x: -30 // Ajusta la posición horizontal del icono
+            x: 50 // Ajusta la posición horizontal del icono
         }
         
         text: "UNAUTHORIZED ACCESS WILL BE TRACED AND REPORTED"
@@ -359,7 +359,7 @@ Rectangle {
         color: "#ff6b52"
 
         anchors.horizontalCenter: parent.horizontalCenter
-        y: 10
+        y: 120
     }
 
     // --- Shutdown Button ---
