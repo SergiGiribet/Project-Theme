@@ -355,7 +355,7 @@ Rectangle {
         }
         
         text: "UNAUTHORIZED ACCESS WILL BE TRACED AND REPORTED"
-        font.pixelSize: 18
+        font.pixelSize: 15
         color: "#ff6b52"
 
         anchors.horizontalCenter: parent.horizontalCenter
