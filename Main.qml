@@ -347,7 +347,7 @@ Rectangle {
         width: 24
         height: 24
         fillMode: Image.PreserveAspectFit
-        y: -50
+        y: -5
     }
 
     Text {
@@ -357,7 +357,7 @@ Rectangle {
         color: "#ff6b52"
 
         anchors.horizontalCenter: parent.horizontalCenter
-        y: -50
+        y: -5
     }
 
     // --- Shutdown Button ---
