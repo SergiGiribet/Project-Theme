@@ -34,7 +34,7 @@ Rectangle {
 
     Rectangle {
         anchors.fill: parent
-        color: "#000000AA" // Capa semi-transparente oscura sobre el fondo
+        color: "#b9000000" // Capa semi-transparente oscura sobre el fondo
     }
 
     // Efecto de Scanline
@@ -186,7 +186,7 @@ Rectangle {
         width: 450
         height: 380
         anchors.centerIn: parent
-        // color: "#40000000" // Fondo semi-transparente oscuro para la caja
+         color: "#00000000" // Fondo semi-transparente oscuro para la caja
         radius: 10
         // border.color: "#ff6b52" // Borde rojo/naranja
         border.width: 1
@@ -330,7 +330,7 @@ Rectangle {
                         // radius: 5
                         color: "#303030"
                         // border.color: "#ff6b52"
-                        border.width: 1
+                        // border.width: 1
                     }
                     onClicked: {
                         passwordField.text = "" // Limpia el campo de contraseña
