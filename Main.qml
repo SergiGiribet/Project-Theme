@@ -335,7 +335,7 @@ Rectangle {
             font.pixelSize: 14
             color: "#ff6b52"
             anchors.top: parent.top
-            x: 75
+            x: 350
             y: 15
         }
     }
