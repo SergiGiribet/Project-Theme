@@ -359,7 +359,7 @@ Rectangle {
         color: "#ff6b52"
 
         anchors.horizontalCenter: parent.horizontalCenter
-        y: 500
+        y: 850
     }
 
     // --- Shutdown Button ---
