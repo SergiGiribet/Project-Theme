@@ -232,6 +232,7 @@ Rectangle {
                 height: 45
                 font.pixelSize: 20
                 color: "white"
+                horizontalAlignment: parent.horizontalCenter
                 horizontalAlignment: TextInput.AlignHLeft
 
                 background: Item {
@@ -281,7 +282,7 @@ Rectangle {
                         text: parent.text
                         font: parent.font
                         color:"#ff6b52"
-                        horizontalAlignment: Text.AlignHCenter
+                        horizontalAlignment: Text.AlignHLeft
                         verticalAlignment: Text.AlignVCenter
                     }
                     background: Rectangle {
@@ -311,7 +312,7 @@ Rectangle {
                         text: parent.text
                         font: parent.font
                         color: "white"
-                        horizontalAlignment: Text.AlignHCenter
+                        horizontalAlignment: Text.AlignRight
                         verticalAlignment: Text.AlignVCenter
                     }
                     background: Rectangle {
@@ -335,8 +336,7 @@ Rectangle {
             font.pixelSize: 14
             color: "#ff6b52"
             anchors.top: parent.top
-            anchors.right: parent.right
-            x: -15
+            x: 75
             y: 15
         }
     }
