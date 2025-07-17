@@ -275,7 +275,7 @@ Rectangle {
                     font.bold: true
 
                     // CAMBIA A CURSOR DE MANO
-                    Component.onCompleted: __behavior.cursorShape = Qt.PointingHandCursor
+                    
 
                     contentItem: Text {
                         text: parent.text
@@ -305,7 +305,7 @@ Rectangle {
                     font.bold: true
 
                     // CAMBIA A CURSOR DE MANO
-                    Component.onCompleted: __behavior.cursorShape = Qt.PointingHandCursor
+                    
 
                     contentItem: Text {
                         text: parent.text
@@ -357,7 +357,7 @@ Rectangle {
         color: "#ff6b52"
         anchors.bottom: parent.bottom
         anchors.horizontalCenter: parent.horizontalCenter
-        y: -120
+        y: 120
     }
 
     // --- Shutdown Button ---
@@ -370,7 +370,7 @@ Rectangle {
         height: 50 // Example height
 
         // CAMBIA A CURSOR DE MANO
-        Component.onCompleted: __behavior.cursorShape = Qt.PointingHandCursor
+        
         
         contentItem: Row {
             spacing: 10
@@ -385,7 +385,6 @@ Rectangle {
             Text {
                 text: "Shutdown"
                 font.pixelSize: 16
-                font.bold: true
                 color: "#ff6b52"
                 verticalAlignment: Text.AlignVCenter
             }
