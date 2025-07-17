@@ -286,7 +286,7 @@ Rectangle {
                     }
                     background: Rectangle {
                         // radius: 5
-                        color: "#303030"
+                        color: "#00303030"
                         // border.color: "#ff6b52"
                         // border.width: 1
                     }
