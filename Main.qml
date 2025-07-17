@@ -359,7 +359,8 @@ Rectangle {
         color: "#ff6b52"
 
         anchors.horizontalCenter: parent.horizontalCenter
-        y: 120
+        anchors.bottom: parent.bottom
+        anchors.bottomMargin: 20 // Espacio desde el fondo
     }
 
     // --- Shutdown Button ---
