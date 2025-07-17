@@ -186,9 +186,9 @@ Rectangle {
         width: 450
         height: 380
         anchors.centerIn: parent
-        color: "#40000000" // Fondo semi-transparente oscuro para la caja
+        // color: "#40000000" // Fondo semi-transparente oscuro para la caja
         radius: 10
-        border.color: "#ff6b52" // Borde rojo/naranja
+        // border.color: "#ff6b52" // Borde rojo/naranja
         border.width: 1
 
         Column {
@@ -322,14 +322,14 @@ Rectangle {
                     contentItem: Text {
                         text: parent.text
                         font: parent.font
-                        color: parent.pressed ? "#ff6b52" : "white"
+                        color:"#ff6b52"
                         horizontalAlignment: Text.AlignHCenter
                         verticalAlignment: Text.AlignVCenter
                     }
                     background: Rectangle {
-                        radius: 5
+                        // radius: 5
                         color: "#303030"
-                        border.color: "#ff6b52"
+                        // border.color: "#ff6b52"
                         border.width: 1
                     }
                     onClicked: {
@@ -348,12 +348,12 @@ Rectangle {
                     contentItem: Text {
                         text: parent.text
                         font: parent.font
-                        color: parent.pressed ? "white" : "black"
+                        color: "white"
                         horizontalAlignment: Text.AlignHCenter
                         verticalAlignment: Text.AlignVCenter
                     }
                     background: Rectangle {
-                        radius: 5
+                        //radius: 5
                         color: "#ff6b52"
                     }
                     onClicked: {
@@ -369,7 +369,7 @@ Rectangle {
 
         Text {
             id: sysActiveText
-            text: "SYS ACTIVE"
+            text: "SYS ACTIVE ◄"
             font.pixelSize: 14
             color: "#ff6b52"
             anchors.top: parent.top
