@@ -350,7 +350,7 @@ Rectangle {
             height: 24
             fillMode: Image.PreserveAspectFit
             anchors.verticalCenter: parent.verticalCenter
-            anchors.left: parent.left + 30
+            x: 20
         }
         
         text: "UNAUTHORIZED ACCESS WILL BE TRACED AND REPORTED"
