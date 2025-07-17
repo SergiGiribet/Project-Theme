@@ -275,8 +275,8 @@ Rectangle {
                     font.bold: true
 
                     // CAMBIA A CURSOR DE MANO
-                    cursor.shape: Qt.PointingHandCursor
-                    
+                    Component.onCompleted: __behavior.cursorShape = Qt.PointingHandCursor
+
                     contentItem: Text {
                         text: parent.text
                         font: parent.font
@@ -305,7 +305,7 @@ Rectangle {
                     font.bold: true
 
                     // CAMBIA A CURSOR DE MANO
-                    cursor.shape: Qt.PointingHandCursor
+                    Component.onCompleted: __behavior.cursorShape = Qt.PointingHandCursor
 
                     contentItem: Text {
                         text: parent.text
@@ -370,7 +370,7 @@ Rectangle {
         height: 50 // Example height
 
         // CAMBIA A CURSOR DE MANO
-        cursor.shape: Qt.PointingHandCursor
+        Component.onCompleted: __behavior.cursorShape = Qt.PointingHandCursor
         
         contentItem: Row {
             spacing: 10
