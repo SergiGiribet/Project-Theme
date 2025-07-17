@@ -350,7 +350,7 @@ Rectangle {
             height: 24
             fillMode: Image.PreserveAspectFit
             anchors.verticalCenter: parent.verticalCenter
-            anchors.left: parent.right
+            anchors.left: parent.left
             anchors.leftMargin: 5 // Espacio entre el icono y el texto
         }
         
