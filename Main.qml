@@ -359,7 +359,6 @@ Rectangle {
                 width: 24
                 height: 24
                 fillMode: Image.PreserveAspectFit
-                color: "white" // Make the icon white if it's a solid shape
             }
             Text {
                 text: "Shutdown"
