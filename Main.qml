@@ -341,23 +341,25 @@ Rectangle {
         }
     }
 
-    // Texto inferior de advertencia
-    Image {
-        source: "images/danger_icon.png" // Placeholder for a danger icon
-        width: 24
-        height: 24
-        fillMode: Image.PreserveAspectFit
-        y: -5
-    }
-
+// --- MENSAJE DE SEGURIDAD ---
     Text {
+
+        Image {
+            source: "images/danger_icon.png" // Placeholder for a danger icon
+            width: 24
+            height: 24
+            fillMode: Image.PreserveAspectFit
+            anchors.verticalCenter: parent.verticalCenter
+            anchors.right: parent.right
+            x: -30 // Ajusta la posición horizontal del icono
+        }
         
         text: "UNAUTHORIZED ACCESS WILL BE TRACED AND REPORTED"
         font.pixelSize: 12
         color: "#ff6b52"
 
         anchors.horizontalCenter: parent.horizontalCenter
-        y: -5
+        y: 10
     }
 
     // --- Shutdown Button ---
