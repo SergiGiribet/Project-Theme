@@ -347,7 +347,7 @@ Rectangle {
         width: 24
         height: 24
         fillMode: Image.PreserveAspectFit
-        y: -120
+        y: -50
     }
 
     Text {
@@ -355,9 +355,9 @@ Rectangle {
         text: "UNAUTHORIZED ACCESS WILL BE TRACED AND REPORTED"
         font.pixelSize: 12
         color: "#ff6b52"
-        anchors.bottom: parent.bottom
+
         anchors.horizontalCenter: parent.horizontalCenter
-        y: 120
+        y: -50
     }
 
     // --- Shutdown Button ---
@@ -365,7 +365,6 @@ Rectangle {
         id: shutdownButton
         anchors.horizontalCenter: parent.horizontalCenter
         anchors.bottom: parent.bottom
-        y: -90 // Adjust position to be above the warning text
         width: 150 // Example width
         height: 50 // Example height
 
