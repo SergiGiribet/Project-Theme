@@ -351,11 +351,11 @@ Rectangle {
             fillMode: Image.PreserveAspectFit
             anchors.verticalCenter: parent.verticalCenter
             anchors.left: parent.left
-            anchors.rightPadding: 20 // Espacio entre el icono y el texto
+            anchors.rightMargin: 20 // Espacio entre el icono y el texto
         }
         
         text: "UNAUTHORIZED ACCESS WILL BE TRACED AND REPORTED"
-        font.pixelSize: 12
+        font.pixelSize: 18
         color: "#ff6b52"
 
         anchors.horizontalCenter: parent.horizontalCenter
