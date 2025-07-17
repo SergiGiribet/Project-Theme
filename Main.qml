@@ -350,8 +350,8 @@ Rectangle {
             height: 24
             fillMode: Image.PreserveAspectFit
             anchors.verticalCenter: parent.verticalCenter
-            anchors.right: parent.right
-            x: 50 // Ajusta la posición horizontal del icono
+            anchors.left: parent.right
+            anchors.leftMargin: 5 // Espacio entre el icono y el texto
         }
         
         text: "UNAUTHORIZED ACCESS WILL BE TRACED AND REPORTED"
@@ -359,8 +359,8 @@ Rectangle {
         color: "#ff6b52"
 
         anchors.horizontalCenter: parent.horizontalCenter
-        anchors.bottom: parent.bottom
-        anchors.bottomMargin: 20 // Espacio desde el fondo
+        bottom: parent.bottom
+        anchors.bottomMargin: 20 // Espacio desde el borde inferior
     }
 
     // --- Shutdown Button ---
