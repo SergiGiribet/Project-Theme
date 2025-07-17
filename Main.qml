@@ -281,7 +281,7 @@ Rectangle {
                         text: parent.text
                         font: parent.font
                         color:"#ff6b52"
-                        horizontalAlignment: Text.AlignHLeft
+                        horizontalAlignment: Text.AlignHCenter
                         verticalAlignment: Text.AlignVCenter
                     }
                     background: Rectangle {
@@ -311,7 +311,7 @@ Rectangle {
                         text: parent.text
                         font: parent.font
                         color: "white"
-                        horizontalAlignment: Text.AlignRight
+                        horizontalAlignment: Text.AlignHCenter
                         verticalAlignment: Text.AlignVCenter
                     }
                     background: Rectangle {
@@ -335,7 +335,7 @@ Rectangle {
             font.pixelSize: 14
             color: "#ff6b52"
             anchors.top: parent.top
-            x: 75
+            x: -50
             y: 15
         }
     }
